@@ -1,3 +1,8 @@
+'use strict'
+// console.log(this);
+// console.log(globalThis);
+
+
 const chalk = require('chalk');
 const text = require('./data')
 
