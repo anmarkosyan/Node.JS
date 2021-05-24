@@ -10,11 +10,20 @@
 //
 // }
 // console.timeEnd('loop time');
-// console.table([{name: 'Anush', age: 34}, {name: 'Aram', age: 35 }])
+// console.table([{name: 'Anus', age: 34}, {name: 'Aram', age: 35 }])
 
 const fs = require("fs");
 
-const readText = fs.readFileSync("./txt/input.txt", "utf-8");
+fs.readFile("./txt/start.txt", "utf-8", (err, data1) => {
+  if(err) return console.log('ERROR 💥')
+  fs.readFile(`./txt/${data1}.txt`, "utf-8", (err, data2) => {
+    //console.log(data2);
+    fs.readFile("./txt/append.txt", "utf-8", (err, data3) => {
+      //console.log(data3);
 
-const writeText = ` This is what we know about avocado: ${readText}\n Created at: ${Date.now()}`;
-fs.writeFileSync("./txt/output.txt", writeText);
+      fs.writeFile("./txt/aboutAvocado.txt", `${data2}\n${data3}`, 'utf-8',err => {
+        console.log('Your file has been written🎉')
+      });
+    });
+  });
+});
