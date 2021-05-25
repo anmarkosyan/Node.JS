@@ -14,6 +14,7 @@
 
 const fs = require("fs");
 const http = require("http");
+const url = require("url");
 
 //FILE SYSTEM
 // fs.readFile("./txt/start.txt", "utf-8", (err, data1) => {
@@ -32,7 +33,18 @@ const http = require("http");
 
 //HTTP
 const server = http.createServer((req, res) => {
-  res.end("Hello from the server!!!");
+  const pathName = req.url;
+  //console.log(pathName);
+  if (pathName === "/" || pathName === "/overview") {
+    res.end("This is the OVERVIEW");
+  } else if (pathName === "/product") {
+    res.end("This is the Product");
+  } else {
+    res.writeHead(404, {
+      "Content-type": "text/html",
+    });
+    res.end("<h1>This page could not be found!!!</h1>");
+  }
 });
 
 server.listen(8000, "127.0.0.1", () => {
