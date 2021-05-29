@@ -1,58 +1,67 @@
-// console.log(global)
-// console.log('hi log!!');//global console module
-//console.warn('hi warn!!');
-// console.error('hi error!');
-// console.error(new Error('hi'));
-// console.trace('hi trace');
-//
-// console.time('loop time');
-// for (let i = 0; i <10 ; i++) {
-//
-// }
-// console.timeEnd('loop time');
-// console.table([{name: 'Anus', age: 34}, {name: 'Aram', age: 35 }])
+//Module
+const fs = require('fs');
+const http = require('http');
+const url = require('url');
 
-const fs = require("fs");
-const http = require("http");
-const url = require("url");
+//File system
+const tempOverview = fs.readFileSync(`${__dirname}/templates/template-overview.html`, 'utf-8');
+const tempCard = fs.readFileSync(`${__dirname}/templates/template-card.html`, 'utf-8');
+const tempProduct = fs.readFileSync(`${__dirname}/templates/template-product.html`, 'utf-8');
+const data = fs.readFileSync(`${__dirname}/dev-data/data.json`, 'utf-8');
 
-//FILE SYSTEM
-// fs.readFile("./txt/start.txt", "utf-8", (err, data1) => {
-//   if(err) return console.log('ERROR 💥')
-//   fs.readFile(`./txt/${data1}.txt`, "utf-8", (err, data2) => {
-//     //console.log(data2);
-//     fs.readFile("./txt/append.txt", "utf-8", (err, data3) => {
-//       //console.log(data3);
-//
-//       fs.writeFile("./txt/aboutAvocado.txt", `${data2}\n${data3}`, 'utf-8',err => {
-//         console.log('Your file has been written🎉')
-//       });
-//     });
-//   });
-// });
+//Functions and variables
+const dataArr = JSON.parse(data);
+
+const replaceTemplate = (template, product) => {
+  let output = template.replace(/{%PRODUCTNAME%}/g, product.productName);
+  output = output.replace(/{%IMAGE%}/g, product.image);
+  output = output.replace(/{%QUANTITY%}/g, product.quantity);
+  output = output.replace(/{%PRICE%}/g, product.price);
+  output = output.replace(/{%NUTRIENTS%}/g, product.nutrients);
+  output = output.replace(/{%DESCRIPTION%}/g, product.description);
+  output = output.replace(/{%ID%}/g, product.id);
+  output = output.replace(/{%FROM%}/g, product.from);
+
+  if (!product.organic) output = output.replace(/{%NOT_ORGANIC%}/g, 'not-organic');
+
+  return output;
+};
 
 //SERVER
-const data = fs.readFileSync(`${__dirname}/dev-data/data.json`, "utf-8");
-const dataObj = JSON.parse(data);
-
 const server = http.createServer((req, res) => {
-  const pathName = req.url;
+  const { query, pathname } = url.parse(req.url, true);
 
-  if (pathName === "/" || pathName === "/overview") {
-    res.end("This is the OVERVIEW");
-  } else if (pathName === "/product") {
-    res.end("This is the Product");
-  } else if (pathName === "/api") {
-    res.writeHead(200, { "Content-type": "application/json" });
+  //overview page
+  if (pathname === '/' || pathname === '/overview') {
+    res.writeHead(200, { 'Content-type': 'text/html' });
+
+    const cardHtml = dataArr.map(item => replaceTemplate(tempCard, item)).join('');
+    const output = tempOverview.replace('{%PRODUCT_CARDS%}', cardHtml);
+    res.end(output);
+
+    //product page
+  } else if (pathname === '/product') {
+    res.writeHead(200, { 'Content-type': 'text/html' });
+
+    const product = dataArr[query.id];
+    const output = replaceTemplate(tempProduct, product);
+
+    res.end(output);
+
+    //api
+  } else if (pathname === '/api') {
+    res.writeHead(200, { 'Content-type': 'application/json' });
     res.end(data);
+
+    //not found
   } else {
     res.writeHead(404, {
-      "Content-type": "text/html",
+      'Content-type': 'text/html',
     });
-    res.end("<h1>This page could not be found!!!</h1>");
+    res.end('<h1>This page could not be found!!!</h1>');
   }
 });
 
-server.listen(8000, "127.0.0.1", () => {
-  console.log("Listening to requests on port 8000...");
+server.listen(8000, '127.0.0.1', () => {
+  console.log('Listening to requests on port 8000...');
 });
