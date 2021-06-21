@@ -1,9 +1,7 @@
 //Modules
 const fs = require('fs');
 const http = require('http');
-
 const slugify = require('slugify');
-
 //const url = require('url');//❗️deprecated
 
 const replaceTemplate = require('./modules/replaceTemplates');
@@ -17,7 +15,7 @@ const data = fs.readFileSync(`${__dirname}/dev-data/data.json`, 'utf-8');
 //Functions and variables
 const dataArr = JSON.parse(data);
 const slugsArr = dataArr.map(item => slugify(item.productName, { lower: true }));
-console.log(slugsArr)
+//console.log(slugsArr)
 //SERVER
 const server = http.createServer((req, res) => {
   const baseURL = `https://${req.headers.host}/`;
