@@ -3,7 +3,7 @@ const crypto = require('crypto');
 
 const start = new Date();
 
-process.env.UV_THREADPOOL_SIZE = '4';
+//process.env.UV_THREADPOOL_SIZE = '8';// or can
 
 setTimeout(() => console.log('Timer 1 finish'), 0);
 setImmediate(() => console.log('Immediate finish'));
