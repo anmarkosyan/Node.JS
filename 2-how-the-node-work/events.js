@@ -1,25 +1,50 @@
 const EventEmitter = require('events');
+const http = require('http');
 
-class Sale extends EventEmitter{
-  constructor() {
-    super();
-  }
-}
+//1️⃣ how to use event-driven architecture, EventEmitter global class,
+// for creating our own instances, and use them
+// class Sale extends EventEmitter{
+//   constructor() {
+//     super();
+//   }
+// }
+//
+// const myEmitter = new Sale();
+////listening event
+// myEmitter.on('newSale', () => {
+//   console.log('I am listener');
+// });
+//
+// myEmitter.on('newSale', () => {
+//   console.log('listener: Anush');
+// });
+//
+// myEmitter.on('newSale', birthYear => {
+//   console.log(`Customers starting at age ${birthYear}`);
+// });
+////emit/call  event
+// myEmitter.emit('newSale', 1986);
 
-const myEmitter = new Sale();
+//2️⃣ how does work HTTP core API behind a sens, actually all core modules
 
-myEmitter.on('newSale', () => {
-  console.log('I am listener');
+const server = http.createServer();
+
+server.on('request', (req, res) => {
+  console.log('request received');
+  res.end('request received');
 });
 
-myEmitter.on('newSale', () => {
-  console.log('listener: Anush');
+server.on('request', (req, res) => {
+  console.log('Another request received');
 });
 
-myEmitter.on('newSale', birthYear => {
-  console.log(`Customers starting at age ${birthYear}`);
+server.on('close', () => {
+  console.log('server is closed');
 });
 
-myEmitter.emit('newSale', 1986);
+server.listen(8000, '127.0.0.1', () => {
+  console.log('Listening to requests on port 8000...');
+});
 
-//how does work HTTP core API behind a sens
+
+
