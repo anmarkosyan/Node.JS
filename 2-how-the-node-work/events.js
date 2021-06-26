@@ -1,16 +1,16 @@
 const EventEmitter = require('events');
 const http = require('http');
-//1️⃣static import
+//📍static import
 // const exp = require('./eventLoop');
 // console.log(exp.concat(1, 3));
 
-//2️⃣ dynamic import
-const loadMyModule = async function () {
-  const { concat } = await import('./eventLoop.js');
-  console.log(concat(2, 3));
-};
-
-loadMyModule();
+//📍 dynamic import
+// const loadMyModule = async function () {
+//   const { concat } = await import('./eventLoop.js');
+//   console.log(concat(2, 3));
+// };
+//
+// loadMyModule();
 
 //1️⃣ how to use event-driven architecture, EventEmitter global class,
 // for creating our own instances, and use them

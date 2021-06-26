@@ -3,7 +3,7 @@ const crypto = require('crypto');
 
 const start = new Date();
 //========= testing dynamic modules ========
-module.exports.concat = (paramA, paramB) => paramA + paramB;
+//module.exports.concat = (paramA, paramB) => paramA + paramB;
 //========
 
 //process.env.UV_THREADPOOL_SIZE = '8';// or can
